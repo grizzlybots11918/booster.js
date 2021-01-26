@@ -1,0 +1,10 @@
+name="rtc-rev-proxy"
+type="javascript"
+# this is only for testing
+route = "https://rtc.team/*"
+
+# we technically should have 2 separate namespaces for prod and dev, but since we aren't writing to kv using the worker, 
+# we should be fine using the same namespace in both environments
+kv_namespaces = [
+  { binding = "dest", id = "4287bc3f9f4c430384d2cd5c241018ae", preview_id = "4287bc3f9f4c430384d2cd5c241018ae" },
+]
