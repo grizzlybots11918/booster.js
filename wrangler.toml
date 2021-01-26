@@ -1,7 +1,7 @@
 name="rtc-rev-proxy"
 type="javascript"
 # this is only for testing
-routes = ["*.rtc.team/*"]
+routes = ["*.rtc.team/*", "*.rtc.team/", "*.rtc.team"]
 zone_id="90f2ae75673556ae5159fd442191313e"
 account_id="1b64a8c4eff655773684dc27044290ac"
 workers_dev=true
