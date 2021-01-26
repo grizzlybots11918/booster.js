@@ -2,7 +2,7 @@
   "name": "booster",
   "version": "1.0.0",
   "description": "booster.js is a speed and performance optimizier for your website, delivering fast web experiences to users.",
-  "main": "index.js",
+  "main": "src/booster.js",
   "directories": {
     "example": "examples"
   },
