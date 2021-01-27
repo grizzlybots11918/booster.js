@@ -1,19 +1,22 @@
-const config = {
+// this is also temporary xD
+const NO_DOMAIN="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+
+var config = {
   basic: {
-    upstream: 'https://en.wikipedia.org/',
-    mobileRedirect: 'https://en.m.wikipedia.org/',
+    upstream: NO_DOMAIN,
+    mobileRedirect: NO_DOMAIN,
   },
 
   firewall: {
-    blockedRegion: ['CN', 'KP', 'SY', 'PK', 'CU'],
     blockedIPAddress: [],
+    blockedRegion: [],
+    // blockedRegion: ['CN', 'KP', 'SY', 'PK', 'CU'],
     scrapeShield: true,
   },
 
+  // for region-specific routing, we probably won't support this yet
   routes: {
-    TW: 'https://zh.wikipedia.org/',
-    HK: 'https://zh.wikipedia.org/',
-    FR: 'https://fr.wikipedia.org/',
+    
   },
 
   optimization: {
@@ -35,6 +38,8 @@ async function isMobile(userAgent) {
 }
 
 async function fetchAndApply(request) {
+  config.basic.upstream = await dest.get(new URL(request.url).hostname) || NO_DOMAIN
+  config.basic.mobileRedirect = config.basic.upstream
   const region = request.headers.get('cf-ipcountry') || '';
   const ipAddress = request.headers.get('cf-connecting-ip') || '';
   const userAgent = request.headers.get('user-agent') || '';
