@@ -1,6 +1,7 @@
-// this is also temporary xD
-const NO_DOMAIN="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+// this is temporary, eventually I'll build an actual fallback page
 const HOME="https://www.rtccoalition.org/"
+const NO_DOMAIN=HOME
+
 
 var config = {
   basic: {
@@ -43,7 +44,7 @@ async function fetchAndApply(request) {
   if (host.split(".").length==2) {
     return Response.redirect(HOME, 301)
   }
-  config.basic.upstream = await dest.get(HOST) || NO_DOMAIN
+  config.basic.upstream = await dest.get(host) || NO_DOMAIN
   config.basic.mobileRedirect = config.basic.upstream
   const region = request.headers.get('cf-ipcountry') || '';
   const ipAddress = request.headers.get('cf-connecting-ip') || '';
