@@ -1,5 +1,6 @@
 // this is also temporary xD
 const NO_DOMAIN="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+const HOME="https://www.rtccoalition.org/"
 
 var config = {
   basic: {
@@ -38,7 +39,11 @@ async function isMobile(userAgent) {
 }
 
 async function fetchAndApply(request) {
-  config.basic.upstream = await dest.get(new URL(request.url).hostname) || NO_DOMAIN
+  const host = new URL(request.url).hostname
+  if (host.split(".").length==2) {
+    return Response.redirect(HOME, 301)
+  }
+  config.basic.upstream = await dest.get(HOST) || NO_DOMAIN
   config.basic.mobileRedirect = config.basic.upstream
   const region = request.headers.get('cf-ipcountry') || '';
   const ipAddress = request.headers.get('cf-connecting-ip') || '';
