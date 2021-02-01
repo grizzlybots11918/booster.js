@@ -125,6 +125,13 @@ async function fetchAndApply(request) {
       'x-pjax-url',
       pjaxURL.href,
     );
+    
+    // from https://gitee.com/xAsiimov/Workers-Proxy/blob/master/src/index.js
+    modifiedResponseHeaders.set('access-control-allow-origin', '*');
+    modifiedResponseHeaders.set('access-control-allow-credentials', true);
+    modifiedResponseHeaders.delete('content-security-policy');
+    modifiedResponseHeaders.delete('content-security-policy-report-only');
+    modifiedResponseHeaders.delete('clear-site-data');
   }
 
   return new Response(
