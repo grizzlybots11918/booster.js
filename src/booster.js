@@ -2,6 +2,22 @@
 const HOME="https://www.rtccoalition.org/"
 const NO_DOMAIN=HOME
 
+class AttributeRewriter {
+  constructor(attributeName, OLD_URL, NEW_URL) {
+    this.attributeName = attributeName
+    this.OLD_URL = OLD_URL
+    this.NEW_URL = NEW_URL
+  }
+  element(element) {
+    const attribute = element.getAttribute(this.attributeName)
+    if (attribute) {
+      element.setAttribute(
+        this.attributeName,
+        attribute.replace(this.OLD_URL, this.NEW_URL),
+      )
+    }
+  }
+}
 
 var config = {
   basic: {
@@ -40,12 +56,20 @@ async function isMobile(userAgent) {
 }
 
 async function fetchAndApply(request) {
-  const host = new URL(request.url).hostname
+  const tmpUrl = new URL(request.url)
+  const host = tmpUrl.hostname
+  const protocol = tmpUrl.protocol+"//"
+  
   if (host.split(".").length==2) {
     return Response.redirect(HOME, 301)
   }
   config.basic.upstream = await dest.get(host) || NO_DOMAIN
   config.basic.mobileRedirect = config.basic.upstream
+  
+  const rewriter = new HTMLRewriter()
+  .on("a", new AttributeRewriter("href", protocol+config.basic.upstream, host))
+  .on("img", new AttributeRewriter("src", protocol+config.basic.upstream, host))
+  
   const region = request.headers.get('cf-ipcountry') || '';
   const ipAddress = request.headers.get('cf-connecting-ip') || '';
   const userAgent = request.headers.get('user-agent') || '';
@@ -132,6 +156,8 @@ async function fetchAndApply(request) {
     modifiedResponseHeaders.delete('content-security-policy');
     modifiedResponseHeaders.delete('content-security-policy-report-only');
     modifiedResponseHeaders.delete('clear-site-data');
+    
+    
   }
 
   return new Response(
